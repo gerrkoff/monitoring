@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using GK.Monitoring.LoggingUtils;
+using GerrKoff.Monitoring.LoggingUtils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 
-namespace GK.Monitoring;
+namespace GerrKoff.Monitoring;
 
 public static class Logging
 {

@@ -1,4 +1,4 @@
-﻿namespace GK.Monitoring;
+﻿namespace GerrKoff.Monitoring;
 
 static class Constants
 {

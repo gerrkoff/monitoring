@@ -1,6 +1,6 @@
 using System;
 
-namespace GK.Monitoring.Common;
+namespace GerrKoff.Monitoring.Common;
 
 public class MonitoringException : Exception
 {

@@ -2,7 +2,7 @@
 using Serilog;
 using Serilog.Enrichers.Span;
 
-namespace GK.Monitoring.LoggingUtils;
+namespace GerrKoff.Monitoring.LoggingUtils;
 
 class LoggingBuilderWeb : LoggingBuilder
 {

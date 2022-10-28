@@ -1,4 +1,4 @@
-namespace GK.Monitoring.LoggingUtils;
+namespace GerrKoff.Monitoring.LoggingUtils;
 
 public class LoggingOptions
 {

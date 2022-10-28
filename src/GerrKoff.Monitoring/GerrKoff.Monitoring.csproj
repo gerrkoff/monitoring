@@ -8,6 +8,13 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>gerrkoff</Authors>
     <RepositoryUrl>https://github.com/gerrkoff/monitoring</RepositoryUrl>
+    <Description>Monitoring infrastructure using Grafana stack</Description>
+    <PackageProjectUrl>https://github.com/gerrkoff/monitoring</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Monitoring Logging Metrics</PackageTags>
+    <PackageReleaseNotes>Init</PackageReleaseNotes>
+    <Title>gerrkoff Monitoring</Title>
   </PropertyGroup>
 
   <ItemGroup>

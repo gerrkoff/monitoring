@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GK.Monitoring", "GK.Monitoring\GK.Monitoring.csproj", "{821FBCBC-69E6-41C4-86F2-0D627D4385E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GerrKoff.Monitoring", "GerrKoff.Monitoring\GerrKoff.Monitoring.csproj", "{821FBCBC-69E6-41C4-86F2-0D627D4385E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

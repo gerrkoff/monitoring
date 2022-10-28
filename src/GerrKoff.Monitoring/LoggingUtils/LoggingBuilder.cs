@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Sinks.Grafana.Loki;
 
-namespace GK.Monitoring.LoggingUtils;
+namespace GerrKoff.Monitoring.LoggingUtils;
 
 abstract class LoggingBuilder
 {
