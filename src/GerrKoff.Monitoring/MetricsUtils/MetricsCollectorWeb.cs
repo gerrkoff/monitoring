@@ -8,22 +8,14 @@ namespace GerrKoff.Monitoring.MetricsUtils;
 
 class MetricsCollectorWeb : MetricsCollector, IHostedService
 {
-    private readonly MetricsOptions _options;
-
-    public MetricsCollectorWeb(ILogger<MetricsCollectorWeb> logger, IOptions<MetricsOptions> options) : base(logger)
+    public MetricsCollectorWeb(ILogger<MetricsCollectorWeb> logger, IOptions<MetricsOptions> options) : base(logger, options)
     {
-        _options = options.Value;
     }
-
-    public bool IsStarted { get; private set; }
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        if (_options.MetricsConfig?.MetricsEnabled ?? false)
-        {
-            StartCollecting(_options);
-            IsStarted = true;
-        }
+        if (IsEnabled)
+            StartCollecting();
 
         return Task.CompletedTask;
     }
