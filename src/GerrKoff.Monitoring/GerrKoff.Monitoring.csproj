@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>false</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>gerrkoff</Authors>
     <RepositoryUrl>https://github.com/gerrkoff/monitoring</RepositoryUrl>
@@ -12,9 +12,9 @@
     <PackageProjectUrl>https://github.com/gerrkoff/monitoring</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>Monitoring Logging Metrics</PackageTags>
-    <PackageReleaseNotes>Init</PackageReleaseNotes>
     <Title>gerrkoff Monitoring</Title>
+    <PackageTags>Monitoring Logging Metrics</PackageTags>
+    <PackageReleaseNotes>Added Prometheus metrics infrastructure</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,6 +26,8 @@
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Serilog.Enrichers.ClientInfo" Version="1.1.4" />
     <PackageReference Include="Serilog.Enrichers.Span" Version="2.2.0" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="5.0.2" />
+    <PackageReference Include="prometheus-net.DotNetRuntime" Version="4.2.2" />
   </ItemGroup>
 
 </Project>
