@@ -1,7 +1,12 @@
+using GerrKoff.Monitoring.Common;
+
 namespace GerrKoff.Monitoring.MetricsUtils;
 
-public class MetricsOptions
+public class MetricsOptions : CommonOptions
 {
-    public bool MetricsEnabled { get; init; } = false;
-    public int? MetricsPort { get; init; } = null;
+    public MetricsOptions(string app) : base(app)
+    {
+    }
+
+    public MetricsConfig? MetricsConfig { get; init; }
 }

@@ -21,11 +21,11 @@ class MetricsCollectorCli : MetricsCollector, IMetricsCollectorCli
 
     public Task Collect(CancellationToken cancellationToken)
     {
-        if (!_options.MetricsEnabled)
+        if (!_options.MetricsConfig?.MetricsEnabled ?? false)
             return Task.CompletedTask;
 
         var server = RunMetricsServer();
-        StartCollecting();
+        StartCollecting(_options);
 
         var tcs = new TaskCompletionSource();
 
@@ -41,12 +41,12 @@ class MetricsCollectorCli : MetricsCollector, IMetricsCollectorCli
 
     private IDisposable RunMetricsServer()
     {
-        if (!_options.MetricsPort.HasValue)
+        if (_options.MetricsConfig?.MetricsPort == null)
             throw new MonitoringException("Metrics port is required");
 
-        var server = new MetricServer(_options.MetricsPort.Value).Start();
+        var server = new MetricServer(_options.MetricsConfig.MetricsPort.Value).Start();
 
-        _logger.LogDebug("Started metrics server on [{Port}]", _options.MetricsPort.Value);
+        _logger.LogTrace("Metrics server on [{Port}]", _options.MetricsConfig.MetricsPort.Value);
         return server;
     }
 }
