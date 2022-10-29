@@ -35,4 +35,8 @@ public class AppMeta
     public string? Environment => _environment;
 
     public string? Instance => _instance;
+
+    public static string? EnvFromEnv() => System.Environment.GetEnvironmentVariable(Constants.EnvVarForEnvironment);
+
+    public static string? InstFromEnv() => System.Environment.GetEnvironmentVariable(Constants.EnvVarForInstance);
 }
