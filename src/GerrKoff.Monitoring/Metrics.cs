@@ -42,7 +42,7 @@ public static class Metrics
 
     public static void UseMetrics(this IApplicationBuilder app)
     {
-        if (!app.ApplicationServices.GetRequiredService<MetricsCollectorWeb>().IsStarted) return;
+        if (!app.ApplicationServices.GetRequiredService<MetricsCollectorWeb>().IsEnabled) return;
 
         app.UseHttpMetrics();
         app.UseMetricServer();

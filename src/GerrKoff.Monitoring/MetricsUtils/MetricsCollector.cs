@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Prometheus.DotNetRuntime;
 
 namespace GerrKoff.Monitoring.MetricsUtils;
@@ -8,21 +9,25 @@ namespace GerrKoff.Monitoring.MetricsUtils;
 abstract class MetricsCollector
 {
     private readonly ILogger<MetricsCollector> _logger;
+    private readonly MetricsOptions _options;
 
     private IDisposable? _metrics;
 
-    protected MetricsCollector(ILogger<MetricsCollector> logger)
+    protected MetricsCollector(ILogger<MetricsCollector> logger, IOptions<MetricsOptions> options)
     {
         _logger = logger;
+        _options = options.Value;
     }
 
-    protected void StartCollecting(MetricsOptions options)
+    public bool IsEnabled => _options.MetricsConfig?.MetricsEnabled ?? false;
+
+    protected void StartCollecting()
     {
         var builder = DotNetRuntimeStatsBuilder.Default();
 
         builder.WithErrorHandler(ex => _logger.LogError(ex, "Unexpected exception occurred in metrics collector"));
 
-        SetupLabels(options);
+        SetupLabels();
 
         _metrics = builder.StartCollecting();
 
@@ -34,11 +39,11 @@ abstract class MetricsCollector
         _metrics?.Dispose();
     }
 
-    private void SetupLabels(MetricsOptions options)
+    private void SetupLabels()
     {
-        var app = options.App;
-        var environment = options.Environment ?? Constants.NoValue;
-        var instance = options.Instance ?? Constants.NoValue;
+        var app = _options.App;
+        var environment = _options.Environment ?? Constants.NoValue;
+        var instance = _options.Instance ?? Constants.NoValue;
 
         Prometheus.Metrics.DefaultRegistry.SetStaticLabels(new Dictionary<string, string>
         {

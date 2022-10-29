@@ -13,7 +13,7 @@ class MetricsCollectorCli : MetricsCollector, IMetricsCollectorCli
     private readonly ILogger<MetricsCollectorCli> _logger;
     private readonly MetricsOptions _options;
 
-    public MetricsCollectorCli(ILogger<MetricsCollectorCli> logger, IOptions<MetricsOptions> options) : base(logger)
+    public MetricsCollectorCli(ILogger<MetricsCollectorCli> logger, IOptions<MetricsOptions> options) : base(logger, options)
     {
         _logger = logger;
         _options = options.Value;
@@ -21,11 +21,11 @@ class MetricsCollectorCli : MetricsCollector, IMetricsCollectorCli
 
     public Task Collect(CancellationToken cancellationToken)
     {
-        if (!_options.MetricsConfig?.MetricsEnabled ?? false)
+        if (!IsEnabled)
             return Task.CompletedTask;
 
         var server = RunMetricsServer();
-        StartCollecting(_options);
+        StartCollecting();
 
         var tcs = new TaskCompletionSource();
 
