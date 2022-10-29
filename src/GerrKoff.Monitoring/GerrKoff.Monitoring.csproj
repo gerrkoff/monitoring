@@ -12,9 +12,9 @@
     <PackageProjectUrl>https://github.com/gerrkoff/monitoring</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>Monitoring Logging Metrics</PackageTags>
-    <PackageReleaseNotes>Init</PackageReleaseNotes>
     <Title>gerrkoff Monitoring</Title>
+    <PackageTags>Monitoring Logging Metrics</PackageTags>
+    <PackageReleaseNotes>Added Prometheus metrics infrastructure</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
