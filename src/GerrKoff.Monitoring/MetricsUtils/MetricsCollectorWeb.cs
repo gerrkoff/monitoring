@@ -17,8 +17,8 @@ class MetricsCollectorWeb : MetricsCollector, IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        if (_options.MetricsEnabled)
-            StartCollecting();
+        if (_options.MetricsConfig?.MetricsEnabled ?? false)
+            StartCollecting(_options);
         return Task.CompletedTask;
     }
 

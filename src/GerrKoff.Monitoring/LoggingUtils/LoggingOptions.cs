@@ -1,14 +1,12 @@
+using GerrKoff.Monitoring.Common;
+
 namespace GerrKoff.Monitoring.LoggingUtils;
 
-public class LoggingOptions
+public class LoggingOptions : CommonOptions
 {
-    public LoggingOptions(string app)
+    public LoggingOptions(string app) : base(app)
     {
-        App = app;
     }
 
-    public string App { get; }
-    public string? Environment { get; init; }
-    public string? Instance { get; init; }
-    public LokiOptions? LokiOptions { get; init; }
+    public LoggingConfig? LoggingConfig { get; init; }
 }

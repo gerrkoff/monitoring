@@ -19,12 +19,12 @@ abstract class LoggingBuilder
 
         LoggerSetup(loggerConfiguration);
 
-        var lokiOptions = options.LokiOptions ?? GetLokiOptionsFromSettings(appConfiguration);
-        var url = lokiOptions?.LokiUrl;
-        var credentials = GetLokiCredentialsFromOptions(lokiOptions);
+        var loggingConfig = options.LoggingConfig ?? GetLoggingConfigFromSettings(appConfiguration);
+        var url = loggingConfig?.LokiUrl;
+        var credentials = GetLokiCredentialsFromConfig(loggingConfig);
         var app = options.App;
-        var environment = options.Environment ?? "unknown";
-        var instance = options.Instance ?? "unknown";
+        var environment = options.Environment ?? Constants.NoValue;
+        var instance = options.Instance ?? Constants.NoValue;
 
         if (!string.IsNullOrWhiteSpace(url))
         {
@@ -33,9 +33,9 @@ abstract class LoggingBuilder
                 url,
                 new List<LokiLabel>
                 {
-                    new() { Key = "app", Value = app },
-                    new() { Key = "env", Value = environment },
-                    new() { Key = "instance", Value = instance },
+                    new() { Key = Constants.LabelApp, Value = app },
+                    new() { Key = Constants.LabelEnvinronment, Value = environment },
+                    new() { Key = Constants.LabelInstance, Value = instance },
                 },
                 LokiLabelFiltrationMode.Include,
                 new string[] { },
@@ -48,12 +48,12 @@ abstract class LoggingBuilder
             app, environment, instance);
     }
 
-    private LokiOptions? GetLokiOptionsFromSettings(IConfiguration appConfiguration)
+    private LoggingConfig? GetLoggingConfigFromSettings(IConfiguration appConfiguration)
     {
-        return appConfiguration.GetSection(Constants.MonitoringSectionName).Get<LokiOptions?>();
+        return appConfiguration.GetSection(Constants.MonitoringSectionName).Get<LoggingConfig?>();
     }
 
-    private LokiCredentials? GetLokiCredentialsFromOptions(LokiOptions? options)
+    private LokiCredentials? GetLokiCredentialsFromConfig(LoggingConfig? options)
     {
         return string.IsNullOrEmpty(options?.LokiUser) || string.IsNullOrEmpty(options.LokiPass)
             ? null
