@@ -15,10 +15,16 @@ class MetricsCollectorWeb : MetricsCollector, IHostedService
         _options = options.Value;
     }
 
+    public bool IsStarted { get; private set; }
+
     public Task StartAsync(CancellationToken cancellationToken)
     {
         if (_options.MetricsConfig?.MetricsEnabled ?? false)
+        {
             StartCollecting(_options);
+            IsStarted = true;
+        }
+
         return Task.CompletedTask;
     }
 

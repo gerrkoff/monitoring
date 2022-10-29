@@ -30,7 +30,8 @@ public static class Metrics
     public static void AddMetricsWeb(this IServiceCollection services, IConfiguration configuration, MetricsOptions options)
     {
         services.AddMetricsCore(configuration, options);
-        services.AddHostedService<MetricsCollectorWeb>();
+        services.AddSingleton<MetricsCollectorWeb>();
+        services.AddHostedService(s => s.GetRequiredService<MetricsCollectorWeb>());
     }
 
     public static void AddMetricsCli(this IServiceCollection services, IConfiguration configuration, MetricsOptions options)
@@ -41,6 +42,8 @@ public static class Metrics
 
     public static void UseMetrics(this IApplicationBuilder app)
     {
+        if (!app.ApplicationServices.GetRequiredService<MetricsCollectorWeb>().IsStarted) return;
+
         app.UseHttpMetrics();
         app.UseMetricServer();
     }
