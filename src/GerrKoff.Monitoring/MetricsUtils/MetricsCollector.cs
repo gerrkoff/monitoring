@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using Prometheus;
 using Prometheus.DotNetRuntime;
 
 namespace GerrKoff.Monitoring.MetricsUtils;
@@ -23,19 +22,9 @@ abstract class MetricsCollector
 
         builder.WithErrorHandler(ex => _logger.LogError(ex, "Unexpected exception occurred in metrics collector"));
 
-        var app = options.App;
-        var environment = options.Environment ?? Constants.NoValue;
-        var instance = options.Instance ?? Constants.NoValue;
+        SetupLabels(options);
 
-        var collectorRegistry = new CollectorRegistry();
-        collectorRegistry.SetStaticLabels(new Dictionary<string, string>
-        {
-            { Constants.LabelApp, app },
-            { Constants.LabelEnvinronment, environment },
-            { Constants.LabelInstance, instance }
-        });
-
-        _metrics = builder.StartCollecting(collectorRegistry);
+        _metrics = builder.StartCollecting();
 
         _logger.LogDebug("Started metrics collector");
     }
@@ -43,5 +32,19 @@ abstract class MetricsCollector
     protected void StopCollecting()
     {
         _metrics?.Dispose();
+    }
+
+    private void SetupLabels(MetricsOptions options)
+    {
+        var app = options.App;
+        var environment = options.Environment ?? Constants.NoValue;
+        var instance = options.Instance ?? Constants.NoValue;
+
+        Prometheus.Metrics.DefaultRegistry.SetStaticLabels(new Dictionary<string, string>
+        {
+            { Constants.LabelApp, app },
+            { Constants.LabelEnvinronment, environment },
+            { Constants.LabelInstance, instance }
+        });
     }
 }
