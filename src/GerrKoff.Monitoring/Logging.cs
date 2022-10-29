@@ -64,5 +64,5 @@ public static class Logging
 
     public static void UseRequestLogging(this IApplicationBuilder app) => app.UseSerilogRequestLogging();
 
-    public static void AddLoggingServices(this IServiceCollection services, IConfiguration configuration) => services.AddHttpContextAccessor();
+    public static void AddLogging(this IServiceCollection services, IConfiguration configuration) => services.AddHttpContextAccessor();
 }
