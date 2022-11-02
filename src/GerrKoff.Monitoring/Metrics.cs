@@ -9,7 +9,7 @@ namespace GerrKoff.Monitoring;
 
 public static class Metrics
 {
-    private static void AddMetricsCore(this IServiceCollection services, IConfiguration configuration, MetricsOptions options)
+    private static IServiceCollection AddMetricsCore(this IServiceCollection services, IConfiguration configuration, MetricsOptions options)
     {
         var metricsConfig = options.MetricsConfig;
         if (metricsConfig == null)
@@ -25,19 +25,25 @@ public static class Metrics
                 Instance = options.Instance,
                 MetricsConfig = metricsConfig,
             }));
+
+        return services;
     }
 
-    public static void AddMetricsWeb(this IServiceCollection services, IConfiguration configuration, MetricsOptions options)
+    public static IServiceCollection AddMetricsWeb(this IServiceCollection services, IConfiguration configuration, MetricsOptions options)
     {
         services.AddMetricsCore(configuration, options);
         services.AddSingleton<MetricsCollectorWeb>();
         services.AddHostedService(s => s.GetRequiredService<MetricsCollectorWeb>());
+
+        return services;
     }
 
-    public static void AddMetricsCli(this IServiceCollection services, IConfiguration configuration, MetricsOptions options)
+    public static IServiceCollection AddMetricsCli(this IServiceCollection services, IConfiguration configuration, MetricsOptions options)
     {
         services.AddMetricsCore(configuration, options);
         services.AddSingleton<IMetricsCollectorCli, MetricsCollectorCli>();
+
+        return services;
     }
 
     public static void UseMetrics(this IApplicationBuilder app)

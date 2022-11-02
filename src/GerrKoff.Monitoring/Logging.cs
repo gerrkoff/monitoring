@@ -47,7 +47,7 @@ public static class Logging
         }
     }
 
-    public static void UseLogging(IConfiguration appConfiguration, LoggingOptions options)
+    public static void UseLoggingCli(IConfiguration appConfiguration, LoggingOptions options)
     {
         var loggerConfiguration = new LoggerConfiguration();
 
@@ -56,7 +56,7 @@ public static class Logging
         Log.Logger = loggerConfiguration.CreateLogger();
     }
 
-    public static IHostBuilder UseLogging(this IHostBuilder hostBuilder, LoggingOptions options) =>
+    public static IHostBuilder UseLoggingWeb(this IHostBuilder hostBuilder, LoggingOptions options) =>
         hostBuilder.UseSerilog(
             (context, services, configuration) =>
                 new LoggingBuilderWeb(services).Build(configuration, context.Configuration, options)
@@ -64,5 +64,5 @@ public static class Logging
 
     public static void UseRequestLogging(this IApplicationBuilder app) => app.UseSerilogRequestLogging();
 
-    public static void AddLogging(this IServiceCollection services, IConfiguration configuration) => services.AddHttpContextAccessor();
+    public static IServiceCollection AddLoggingCli(this IServiceCollection services) => services.AddLogging(b => b.AddSerilog());
 }
