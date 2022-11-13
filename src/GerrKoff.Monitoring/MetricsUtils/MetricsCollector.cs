@@ -31,6 +31,8 @@ abstract class MetricsCollector
 
         _metrics = builder.StartCollecting();
 
+        ExportVersionIfExist();
+
         _logger.LogDebug("Started metrics collector");
     }
 
@@ -51,5 +53,16 @@ abstract class MetricsCollector
             { Constants.LabelEnvinronment, environment },
             { Constants.LabelInstance, instance }
         });
+    }
+
+    private void ExportVersionIfExist()
+    {
+        if (_options.Version != null)
+        {
+            Prometheus.Metrics
+                .CreateGauge("app_version", "", "app_version")
+                .WithLabels(_options.Version)
+                .Set(1);
+        }
     }
 }

@@ -23,6 +23,7 @@ public static class Metrics
             {
                 Environment = options.Environment,
                 Instance = options.Instance,
+                Version = options.Version,
                 MetricsConfig = metricsConfig,
             }));
 
