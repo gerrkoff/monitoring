@@ -10,4 +10,5 @@ public class CommonOptions
     public string App { get; }
     public string? Environment { get; init; }
     public string? Instance { get; init; }
+    public string? Version { get; init; }
 }
