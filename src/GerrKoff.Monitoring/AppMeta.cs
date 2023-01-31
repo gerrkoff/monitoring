@@ -18,6 +18,9 @@ public class AppMeta
         _instance = instance;
     }
 
+    public AppMeta FromEnvVars(Type mainAssemblyType, string app) =>
+        new(mainAssemblyType, app, EnvFromEnv(), InstFromEnv());
+
     public string Version() => _mainAssemblyType.Assembly
         .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
         .InformationalVersion ?? Constants.NoValue;

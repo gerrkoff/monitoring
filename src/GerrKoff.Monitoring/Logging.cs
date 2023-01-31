@@ -47,6 +47,14 @@ public static class Logging
         }
     }
 
+    public static void UseLoggingCli(IConfiguration appConfiguration, AppMeta meta) => UseLoggingCli(appConfiguration,
+        new LoggingOptions(meta.App)
+        {
+            Environment = meta.Environment,
+            Instance = meta.Instance,
+            Version = meta.Version(),
+        });
+
     public static void UseLoggingCli(IConfiguration appConfiguration, LoggingOptions options)
     {
         var loggerConfiguration = new LoggerConfiguration();
@@ -55,6 +63,14 @@ public static class Logging
 
         Log.Logger = loggerConfiguration.CreateLogger();
     }
+
+    public static IHostBuilder UseLoggingWeb(this IHostBuilder hostBuilder, AppMeta meta) =>
+        hostBuilder.UseLoggingWeb(new LoggingOptions(meta.App)
+        {
+            Environment = meta.Environment,
+            Instance = meta.Instance,
+            Version = meta.Version(),
+        });
 
     public static IHostBuilder UseLoggingWeb(this IHostBuilder hostBuilder, LoggingOptions options) =>
         hostBuilder.UseSerilog(

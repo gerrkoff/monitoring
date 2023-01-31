@@ -1,13 +1,15 @@
 using GerrKoff.Monitoring;
+using GerrKoff.Monitoring.LoggingUtils;
+using GerrKoff.Monitoring.MetricsUtils;
 
 const string appName = "example-app";
 
 Logging.RunSafe(() =>
 {
     var builder = WebApplication.CreateBuilder(args);
-    builder.Host.UseLoggingWeb(new (appName));
+    builder.Host.UseLoggingWeb(new LoggingOptions(appName));
 
-    builder.Services.AddMetricsWeb(builder.Configuration, new (appName));
+    builder.Services.AddMetricsWeb(builder.Configuration, new MetricsOptions(appName));
 
     var app = builder.Build();
 
