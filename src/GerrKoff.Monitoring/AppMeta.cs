@@ -18,7 +18,7 @@ public class AppMeta
         _instance = instance;
     }
 
-    public AppMeta FromEnvVars(Type mainAssemblyType, string app) =>
+    public static AppMeta FromEnvironment(Type mainAssemblyType, string app) =>
         new(mainAssemblyType, app, EnvFromEnv(), InstFromEnv());
 
     public string Version() => _mainAssemblyType.Assembly
