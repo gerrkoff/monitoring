@@ -1,4 +1,5 @@
 ﻿using GerrKoff.Monitoring;
+using GerrKoff.Monitoring.LoggingUtils;
 using GerrKoff.Monitoring.MetricsUtils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,11 +13,11 @@ await Logging.RunSafeAsync(async () =>
         .AddJsonFile("appsettings.json", false)
         .Build();
 
-    Logging.UseLoggingCli(config, new (appName));
+    Logging.UseLoggingCli(config, new LoggingOptions(appName));
 
     var services = new ServiceCollection()
         .AddLoggingCli()
-        .AddMetricsCli(config, new (appName))
+        .AddMetricsCli(config, new MetricsOptions(appName))
         .BuildServiceProvider();
 
     var metricsCollector = services.GetRequiredService<IMetricsCollectorCli>();

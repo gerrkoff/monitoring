@@ -9,6 +9,7 @@ namespace GerrKoff.Monitoring;
 
 public static class Metrics
 {
+    // ReSharper disable once UnusedMethodReturnValue.Local
     private static IServiceCollection AddMetricsCore(this IServiceCollection services, IConfiguration configuration, MetricsOptions options)
     {
         var metricsConfig = options.MetricsConfig;
@@ -30,6 +31,14 @@ public static class Metrics
         return services;
     }
 
+    public static IServiceCollection AddMetricsWeb(this IServiceCollection services, IConfiguration configuration,
+        AppMeta meta) => services.AddMetricsWeb(configuration, new MetricsOptions(meta.App)
+    {
+        Environment = meta.Environment,
+        Instance = meta.Instance,
+        Version = meta.Version(),
+    });
+
     public static IServiceCollection AddMetricsWeb(this IServiceCollection services, IConfiguration configuration, MetricsOptions options)
     {
         services.AddMetricsCore(configuration, options);
@@ -38,6 +47,14 @@ public static class Metrics
 
         return services;
     }
+
+    public static IServiceCollection AddMetricsCli(this IServiceCollection services, IConfiguration configuration,
+        AppMeta meta) => services.AddMetricsCli(configuration, new MetricsOptions(meta.App)
+    {
+        Environment = meta.Environment,
+        Instance = meta.Instance,
+        Version = meta.Version(),
+    });
 
     public static IServiceCollection AddMetricsCli(this IServiceCollection services, IConfiguration configuration, MetricsOptions options)
     {
