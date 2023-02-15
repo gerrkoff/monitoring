@@ -72,6 +72,8 @@ public static class Logging
             Version = meta.Version(),
         });
 
+    public static IServiceCollection AddLoggingWeb(this IServiceCollection services) => services.AddHttpContextAccessor();
+
     public static IHostBuilder UseLoggingWeb(this IHostBuilder hostBuilder, LoggingOptions options) =>
         hostBuilder.UseSerilog(
             (context, services, configuration) =>
