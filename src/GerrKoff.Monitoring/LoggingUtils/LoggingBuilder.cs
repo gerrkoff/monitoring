@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Serilog;
+using Serilog.Enrichers.Span;
 using Serilog.Sinks.Grafana.Loki;
 
 namespace GerrKoff.Monitoring.LoggingUtils;
@@ -15,6 +16,10 @@ abstract class LoggingBuilder
     {
         loggerConfiguration
             .ReadFrom.Configuration(appConfiguration)
+            .Enrich.WithSpan()
+            .Enrich.FromLogContext()
+            .Enrich.WithClientIp()
+            .Enrich.WithClientAgent()
             .WriteTo.Console();
 
         LoggerSetup(loggerConfiguration);
