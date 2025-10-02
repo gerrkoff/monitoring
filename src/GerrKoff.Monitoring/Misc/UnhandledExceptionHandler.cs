@@ -9,8 +9,10 @@ namespace GerrKoff.Monitoring.Misc;
 
 public static class UnhandledExceptionHandler
 {
-    public static void UseUnhandledExceptionHandler(this IApplicationBuilder app, IWebHostEnvironment environment) =>
+    public static void UseUnhandledExceptionHandler(this IApplicationBuilder app, IWebHostEnvironment environment)
+    {
         app.UseUnhandledExceptionHandler(environment.IsProduction());
+    }
 
     public static void UseUnhandledExceptionHandler(this IApplicationBuilder app, bool isProduction)
     {
@@ -39,7 +41,7 @@ public static class UnhandledExceptionHandler
                 {
                     { "Type", exception.GetType().ToString() },
                     { "Message", exception.Message },
-                    { "StackTrace", exception.StackTrace }
+                    { "StackTrace", exception.StackTrace },
                 });
             });
         });

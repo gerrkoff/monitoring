@@ -3,7 +3,7 @@ using Serilog.Enrichers.Span;
 
 namespace GerrKoff.Monitoring.LoggingUtils;
 
-class LoggingBuilderCli : LoggingBuilder
+internal sealed class LoggingBuilderCli : LoggingBuilder
 {
     protected override void LoggerSetup(LoggerConfiguration configuration)
     {

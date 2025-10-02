@@ -10,24 +10,27 @@ using Serilog.Events;
 
 namespace GerrKoff.Monitoring;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1724:Type names should not match namespaces", Justification = "This is a public API class name that cannot be changed without breaking changes")]
 public static class Logging
 {
     public static ILogger Logger => Log.Logger;
 
     public static async void RunSafe(Action run, Func<string?> getVersion)
     {
-        await RunSafeAsync(() =>
-        {
-            run();
-            return Task.CompletedTask;
-        }, getVersion);
+        await RunSafeAsync(
+            () =>
+            {
+                run();
+                return Task.CompletedTask;
+            },
+            getVersion);
     }
 
     public static async Task RunSafeAsync(Func<Task> run, Func<string?> getVersion)
     {
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-            .WriteTo.Console()
+            .WriteTo.Console(formatProvider: System.Globalization.CultureInfo.InvariantCulture)
             .CreateBootstrapLogger();
 
         try
@@ -47,13 +50,17 @@ public static class Logging
         }
     }
 
-    public static void UseLoggingCli(IConfiguration appConfiguration, AppMeta meta) => UseLoggingCli(appConfiguration,
-        new LoggingOptions(meta.App)
-        {
-            Environment = meta.Environment,
-            Instance = meta.Instance,
-            Version = meta.Version(),
-        });
+    public static void UseLoggingCli(IConfiguration appConfiguration, AppMeta meta)
+    {
+        UseLoggingCli(
+            appConfiguration,
+            new LoggingOptions(meta.App)
+            {
+                Environment = meta.Environment,
+                Instance = meta.Instance,
+                Version = meta.Version(),
+            });
+    }
 
     public static void UseLoggingCli(IConfiguration appConfiguration, LoggingOptions options)
     {
@@ -64,23 +71,35 @@ public static class Logging
         Log.Logger = loggerConfiguration.CreateLogger();
     }
 
-    public static IHostBuilder UseLoggingWeb(this IHostBuilder hostBuilder, AppMeta meta) =>
-        hostBuilder.UseLoggingWeb(new LoggingOptions(meta.App)
+    public static IHostBuilder UseLoggingWeb(this IHostBuilder hostBuilder, AppMeta meta)
+    {
+        return hostBuilder.UseLoggingWeb(new LoggingOptions(meta.App)
         {
             Environment = meta.Environment,
             Instance = meta.Instance,
             Version = meta.Version(),
         });
+    }
 
-    public static IServiceCollection AddLoggingWeb(this IServiceCollection services) => services.AddHttpContextAccessor();
+    public static IServiceCollection AddLoggingWeb(this IServiceCollection services)
+    {
+        return services.AddHttpContextAccessor();
+    }
 
-    public static IHostBuilder UseLoggingWeb(this IHostBuilder hostBuilder, LoggingOptions options) =>
-        hostBuilder.UseSerilog(
+    public static IHostBuilder UseLoggingWeb(this IHostBuilder hostBuilder, LoggingOptions options)
+    {
+        return hostBuilder.UseSerilog(
             (context, services, configuration) =>
-                new LoggingBuilderWeb(services).Build(configuration, context.Configuration, options)
-        );
+                new LoggingBuilderWeb(services).Build(configuration, context.Configuration, options));
+    }
 
-    public static void UseRequestLogging(this IApplicationBuilder app) => app.UseSerilogRequestLogging();
+    public static void UseRequestLogging(this IApplicationBuilder app)
+    {
+        app.UseSerilogRequestLogging();
+    }
 
-    public static IServiceCollection AddLoggingCli(this IServiceCollection services) => services.AddLogging(b => b.AddSerilog());
+    public static IServiceCollection AddLoggingCli(this IServiceCollection services)
+    {
+        return services.AddLogging(b => b.AddSerilog());
+    }
 }

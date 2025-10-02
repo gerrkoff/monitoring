@@ -6,18 +6,11 @@ using Prometheus.DotNetRuntime;
 
 namespace GerrKoff.Monitoring.MetricsUtils;
 
-abstract class MetricsCollector
+internal abstract class MetricsCollector(ILogger<MetricsCollector> logger, IOptions<MetricsOptions> options)
 {
-    private readonly ILogger<MetricsCollector> _logger;
-    private readonly MetricsOptions _options;
+    private readonly MetricsOptions _options = options.Value;
 
     private IDisposable? _metrics;
-
-    protected MetricsCollector(ILogger<MetricsCollector> logger, IOptions<MetricsOptions> options)
-    {
-        _logger = logger;
-        _options = options.Value;
-    }
 
     public bool IsEnabled => _options.MetricsConfig?.MetricsEnabled ?? false;
 
@@ -25,7 +18,9 @@ abstract class MetricsCollector
     {
         var builder = DotNetRuntimeStatsBuilder.Default();
 
-        builder.WithErrorHandler(ex => _logger.LogError(ex, "Unexpected exception occurred in metrics collector"));
+#pragma warning disable CA1848 // Use LoggerMessage delegates for better performance
+        builder.WithErrorHandler(ex => logger.LogError(ex, "Unexpected exception occurred in metrics collector"));
+#pragma warning restore CA1848
 
         SetupLabels();
 
@@ -33,7 +28,9 @@ abstract class MetricsCollector
 
         ExportVersionIfExist();
 
-        _logger.LogDebug("Started metrics collector");
+#pragma warning disable CA1848 // Use LoggerMessage delegates for better performance
+        logger.LogDebug("Started metrics collector");
+#pragma warning restore CA1848
     }
 
     protected void StopCollecting()
@@ -51,7 +48,7 @@ abstract class MetricsCollector
         {
             { Constants.LabelApp, app },
             { Constants.LabelEnvinronment, environment },
-            { Constants.LabelInstance, instance }
+            { Constants.LabelInstance, instance },
         });
     }
 
@@ -60,7 +57,7 @@ abstract class MetricsCollector
         if (_options.Version != null)
         {
             Prometheus.Metrics
-                .CreateGauge("app_version", "", "app_version")
+                .CreateGauge("app_version", string.Empty, "app_version")
                 .WithLabels(_options.Version)
                 .Set(1);
         }

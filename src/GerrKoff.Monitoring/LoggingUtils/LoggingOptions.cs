@@ -2,11 +2,7 @@ using GerrKoff.Monitoring.Common;
 
 namespace GerrKoff.Monitoring.LoggingUtils;
 
-public class LoggingOptions : CommonOptions
+public class LoggingOptions(string app) : CommonOptions(app)
 {
-    public LoggingOptions(string app) : base(app)
-    {
-    }
-
     public LoggingConfig? LoggingConfig { get; init; }
 }

@@ -8,16 +8,11 @@ using Prometheus;
 
 namespace GerrKoff.Monitoring.MetricsUtils;
 
-class MetricsCollectorCli : MetricsCollector, IMetricsCollectorCli
+internal sealed class MetricsCollectorCli(ILogger<MetricsCollectorCli> logger, IOptions<MetricsOptions> options)
+    : MetricsCollector(logger, options), IMetricsCollectorCli
 {
-    private readonly ILogger<MetricsCollectorCli> _logger;
-    private readonly MetricsOptions _options;
-
-    public MetricsCollectorCli(ILogger<MetricsCollectorCli> logger, IOptions<MetricsOptions> options) : base(logger, options)
-    {
-        _logger = logger;
-        _options = options.Value;
-    }
+    private readonly ILogger<MetricsCollectorCli> _logger = logger;
+    private readonly MetricsOptions _options = options.Value;
 
     public Task Collect(CancellationToken cancellationToken)
     {
@@ -39,14 +34,18 @@ class MetricsCollectorCli : MetricsCollector, IMetricsCollectorCli
         return tcs.Task;
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "MetricServer.Start() returns IDisposable that owns the server lifetime")]
     private IDisposable RunMetricsServer()
     {
         if (_options.MetricsConfig?.MetricsPort == null)
             throw new MonitoringException("Metrics port is required");
 
-        var server = new MetricServer(_options.MetricsConfig.MetricsPort.Value).Start();
+        var server = new MetricServer(_options.MetricsConfig.MetricsPort.Value);
+        var runningServer = server.Start();
 
+#pragma warning disable CA1848 // Use LoggerMessage delegates for better performance
         _logger.LogTrace("Metrics server on [{Port}]", _options.MetricsConfig.MetricsPort.Value);
-        return server;
+#pragma warning restore CA1848
+        return runningServer;
     }
 }

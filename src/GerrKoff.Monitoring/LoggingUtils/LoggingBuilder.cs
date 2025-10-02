@@ -1,21 +1,19 @@
-﻿using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Sinks.Grafana.Loki;
 
 namespace GerrKoff.Monitoring.LoggingUtils;
 
-abstract class LoggingBuilder
+internal abstract class LoggingBuilder
 {
     public void Build(
         LoggerConfiguration loggerConfiguration,
         IConfiguration appConfiguration,
-        LoggingOptions options
-    )
+        LoggingOptions options)
     {
         loggerConfiguration
             .ReadFrom.Configuration(appConfiguration)
-            .WriteTo.Console();
+            .WriteTo.Console(formatProvider: System.Globalization.CultureInfo.InvariantCulture);
 
         LoggerSetup(loggerConfiguration);
 
@@ -31,34 +29,35 @@ abstract class LoggingBuilder
             Logging.Logger.Information("Loki is connected to [{Url}]", url);
             loggerConfiguration.WriteTo.GrafanaLoki(
                 url,
-                new List<LokiLabel>
-                {
+                [
                     new() { Key = Constants.LabelApp, Value = app },
                     new() { Key = Constants.LabelEnvinronment, Value = environment },
                     new() { Key = Constants.LabelInstance, Value = instance },
-                },
+                ],
                 LokiLabelFiltrationMode.Include,
-                new string[] { },
+                [],
                 textFormatter: new LokiJsonTextFormatter(),
-                credentials: credentials
-            );
+                credentials: credentials);
         }
 
-        Logging.Logger.Information("Application [{Application}] Environment [{Environment}] Instance [{Instance}]",
-            app, environment, instance);
+        Logging.Logger.Information(
+            "Application [{Application}] Environment [{Environment}] Instance [{Instance}]",
+            app,
+            environment,
+            instance);
     }
 
-    private LoggingConfig? GetLoggingConfigFromSettings(IConfiguration appConfiguration)
+    protected abstract void LoggerSetup(LoggerConfiguration configuration);
+
+    private static LoggingConfig? GetLoggingConfigFromSettings(IConfiguration appConfiguration)
     {
         return appConfiguration.GetSection(Constants.MonitoringSectionName).Get<LoggingConfig?>();
     }
 
-    private LokiCredentials? GetLokiCredentialsFromConfig(LoggingConfig? options)
+    private static LokiCredentials? GetLokiCredentialsFromConfig(LoggingConfig? options)
     {
         return string.IsNullOrEmpty(options?.LokiUser) || string.IsNullOrEmpty(options.LokiPass)
             ? null
             : new LokiCredentials { Login = options.LokiUser, Password = options.LokiPass };
     }
-
-    protected abstract void LoggerSetup(LoggerConfiguration configuration);
 }

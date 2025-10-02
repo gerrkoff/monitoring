@@ -4,19 +4,12 @@ using Serilog.Enrichers.Span;
 
 namespace GerrKoff.Monitoring.LoggingUtils;
 
-class LoggingBuilderWeb : LoggingBuilder
+internal sealed class LoggingBuilderWeb(IServiceProvider services) : LoggingBuilder
 {
-    private readonly IServiceProvider _services;
-
-    public LoggingBuilderWeb(IServiceProvider services)
-    {
-        _services = services;
-    }
-
     protected override void LoggerSetup(LoggerConfiguration configuration)
     {
         configuration
-            .ReadFrom.Services(_services)
+            .ReadFrom.Services(services)
             .Enrich.FromLogContext()
             .Enrich.WithSpan()
             .Enrich.WithClientIp()
