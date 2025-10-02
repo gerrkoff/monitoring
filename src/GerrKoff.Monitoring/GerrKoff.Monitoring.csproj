@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>false</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>gerrkoff.Monitoring</PackageId>
     <Version>0.8.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>gerrkoff</Authors>
