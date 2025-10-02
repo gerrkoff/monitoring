@@ -20,6 +20,6 @@ class LoggingBuilderWeb : LoggingBuilder
             .Enrich.FromLogContext()
             .Enrich.WithSpan()
             .Enrich.WithClientIp()
-            .Enrich.WithClientAgent();
+            .Enrich.WithRequestHeader("User-Agent");
     }
 }
